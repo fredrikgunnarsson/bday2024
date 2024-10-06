@@ -36,9 +36,10 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 2rem;
+  height: 5rem;
   font-size: 0.8rem;
   color: black;
+  text-align: center;
 }
 
 .container {
