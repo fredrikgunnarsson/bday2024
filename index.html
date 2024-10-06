@@ -169,13 +169,12 @@
       <div class="item">
         <img src="/52.avif" alt="Description" />
       </div>
-
-      <!-- Repeat for each image -->
     </div>
   </body>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const glowDivs = document.querySelectorAll('.item')
+      let startX, startY
 
       glowDivs.forEach((glowDiv) => {
         glowDiv.addEventListener(
@@ -183,18 +182,39 @@
           (event) => {
             event.preventDefault()
 
-            confetti({
-              particleCount: 100,
-              spread: 70,
-              origin: { y: 0.6 },
-            })
+            startX = event.touches[0].clientX
+            startY = event.touches[0].clientY
+          },
+          { passive: false }
+        )
 
-            glowDivs.forEach((otherGlowDiv) => {
-              if (otherGlowDiv !== glowDiv) {
-                otherGlowDiv.classList.remove('glow-effect')
-              }
-            })
-            glowDiv.classList.toggle('glow-effect')
+        glowDiv.addEventListener(
+          'touchend',
+          (event) => {
+            const endX = event.changedTouches[0].clientX
+            const endY = event.changedTouches[0].clientY
+
+            const diffX = Math.abs(endX - startX)
+            const diffY = Math.abs(endY - startY)
+
+            const threshold = 10
+
+            if (diffX < threshold && diffY < threshold) {
+              event.preventDefault()
+
+              confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+              })
+
+              glowDivs.forEach((otherGlowDiv) => {
+                if (otherGlowDiv !== glowDiv) {
+                  otherGlowDiv.classList.remove('glow-effect')
+                }
+              })
+              glowDiv.classList.toggle('glow-effect')
+            }
           },
           { passive: false }
         )
