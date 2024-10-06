@@ -177,29 +177,35 @@
       let startX, startY
 
       glowDivs.forEach((glowDiv) => {
+        // Track the starting position of the touch
         glowDiv.addEventListener(
           'touchstart',
           (event) => {
-            event.preventDefault()
-
+            // Record the initial touch position
             startX = event.touches[0].clientX
             startY = event.touches[0].clientY
           },
-          { passive: false }
+          { passive: true } // allow default scroll behavior
         )
 
+        // Detect when the touch ends and check if it was a tap (not a scroll)
         glowDiv.addEventListener(
           'touchend',
           (event) => {
+            // Record the final touch position
             const endX = event.changedTouches[0].clientX
             const endY = event.changedTouches[0].clientY
 
+            // Calculate the distance moved during the touch
             const diffX = Math.abs(endX - startX)
             const diffY = Math.abs(endY - startY)
 
+            // Set a threshold to differentiate between a tap and a scroll
             const threshold = 10
 
+            // If the movement is less than the threshold, consider it a tap
             if (diffX < threshold && diffY < threshold) {
+              // Now prevent default if it's a tap (so no scrolling is triggered)
               event.preventDefault()
 
               confetti({
@@ -219,6 +225,7 @@
           { passive: false }
         )
 
+        // Click event for desktop users
         glowDiv.addEventListener('click', (event) => {
           event.preventDefault()
 
